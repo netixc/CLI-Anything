@@ -15,12 +15,20 @@ NC='\033[0m'
 
 # Determine plugin path
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# Default to cli-anything-plugin relative to qoder-plugin directory
-PLUGIN_DIR="${1:-$(cd "${SCRIPT_DIR}/../cli-anything-plugin" && pwd)}"
+# Determine plugin directory: normalize to absolute path
+if [ $# -ge 1 ]; then
+    if ! PLUGIN_DIR="$(cd "$1" && pwd)"; then
+        echo -e "${YELLOW}Error: Invalid plugin directory: $1${NC}" >&2
+        exit 1
+    fi
+else
+    # Default to cli-anything-plugin relative to qoder-plugin directory
+    PLUGIN_DIR="$(cd "${SCRIPT_DIR}/../cli-anything-plugin" && pwd)"
+fi
 
 # Validate plugin directory
 if [ ! -f "${PLUGIN_DIR}/.claude-plugin/plugin.json" ]; then
-    echo -e "${YELLOW}Error: plugin.json not found at ${PLUGIN_DIR}/.claude-plugin/${NC}"
+    echo -e "${YELLOW}Error: plugin.json not found at ${PLUGIN_DIR}/.claude-plugin/plugin.json${NC}"
     exit 1
 fi
 

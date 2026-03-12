@@ -236,7 +236,6 @@ Use CLI-Anything to validate ./libreoffice
 
 The Codex skill adapts the same methodology used by the Claude Code plugin and
 OpenCode commands, while keeping the generated Python harness format unchanged.
-  
 </details>
 
 <details>
