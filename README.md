@@ -56,7 +56,7 @@ CLI is the universal interface for both humans and AI agents:
 
 - **Python 3.10+**
 - Target software installed (e.g., GIMP, Blender, LibreOffice, or your own application)
-- A supported AI coding agent: [Claude Code](#-claude-code) | [OpenCode](#-opencode) | [Qodercli](#-qodercli) | [More Platforms](#-more-platforms-coming-soon)
+- A supported AI coding agent: [Claude Code](#-claude-code) | [OpenCode](#-opencode) | [Codex](#-codex) | [Qodercli](#-qodercli) | [More Platforms](#-more-platforms-coming-soon)
 
 ### Pick Your Platform
 
@@ -135,7 +135,7 @@ cp -r CLI-Anything/cli-anything-plugin ~/.claude/plugins/cli-anything
 </details>
 
 <details>
-<summary><h4 id="-opencode">⚡ OpenCode</h4></summary>
+<summary><h4 id="-opencode">⚡ OpenCode (Experimental)</h4></summary>
 
 **Step 1: Install the Commands**
 
@@ -183,6 +183,7 @@ The command runs as a subtask and follows the same 7-phase methodology as Claude
 </details>
 
 <details>
+
 <summary><h4 id="-qodercli">⚡ Qodercli</h4></summary>
 
 **Step 1: Register the Plugin**
@@ -201,7 +202,39 @@ This registers the cli-anything plugin in `~/.qoder.json`. Start a new Qodercli 
 /cli-anything:refine ./gimp "batch processing and filters"
 /cli-anything:validate ./gimp
 ```
+</details>
+  
+<summary><h4 id="-codex">⚡ Codex <sup><code>Experimental</code></sup> <sup><code>Community</code></sup></h4></summary>
 
+**Step 1: Install the Skill**
+
+Run the bundled installer:
+
+```bash
+# Clone the repo
+git clone https://github.com/HKUDS/CLI-Anything.git
+
+# Install the skill
+bash CLI-Anything/codex-skill/scripts/install.sh
+```
+
+This installs the skill to `$CODEX_HOME/skills/cli-anything` (or `~/.codex/skills/cli-anything` if `CODEX_HOME` is unset).
+
+Restart Codex after installation so it is discovered.
+
+**Step 2: Use CLI-Anything from Codex**
+
+Describe the task in natural language, for example:
+
+```text
+Use CLI-Anything to build a harness for ./gimp
+Use CLI-Anything to refine ./shotcut for picture-in-picture workflows
+Use CLI-Anything to validate ./libreoffice
+```
+
+The Codex skill adapts the same methodology used by the Claude Code plugin and
+OpenCode commands, while keeping the generated Python harness format unchanged.
+  
 </details>
 
 <details>
@@ -209,6 +242,7 @@ This registers the cli-anything plugin in `~/.qoder.json`. Start a new Qodercli 
 
 CLI-Anything is designed to be platform-agnostic. Support for more AI coding agents is planned:
 
+- **Codex** — available via the bundled skill in `codex-skill/`
 - **Cursor** — coming soon
 - **Windsurf** — coming soon
 - **Your favorite tool** — contributions welcome! See the `opencode-commands/` directory for a reference implementation.
@@ -539,6 +573,7 @@ cli-anything/
 │   └── scripts/
 │       └── setup-cli-anything.sh         # Setup script
 │
+├── 🤖 codex-skill/                      # Codex skill entry point
 ├── 🎨 gimp/agent-harness/               # GIMP CLI (107 tests)
 ├── 🧊 blender/agent-harness/            # Blender CLI (208 tests)
 ├── ✏️ inkscape/agent-harness/            # Inkscape CLI (202 tests)
@@ -716,6 +751,12 @@ We welcome contributions! CLI-Anything is designed to be extensible:
 - **Methodology improvements** — PRs to `HARNESS.md` that encode new lessons learned
 - **Plugin enhancements** — New commands, phase improvements, better validation
 - **Test coverage** — More E2E scenarios, edge cases, workflow tests
+
+### Limitations
+
+- **Requires strong foundation models** — CLI-Anything relies on frontier-class models (e.g., Claude Opus 4.6, Claude Sonnet 4.6, GPT-5.4) for reliable harness generation. Weaker or smaller models may produce incomplete or incorrect CLIs that require significant manual correction.
+- **Relies on available source code** — The 7-phase pipeline analyzes and generates from source code. When the target software only provides compiled binaries that require decompilation, harness quality and coverage will degrade substantially.
+- **May require iterative refinement** — A single `/cli-anything` run may not fully cover all capabilities. Running `/refine` one or more times is often needed to push the CLI's performance and coverage to production quality.
 
 ### Roadmap
 

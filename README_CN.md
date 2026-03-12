@@ -56,7 +56,7 @@ CLI 是人类和 AI Agent 共通的万能接口：
 
 - **Python 3.10+**
 - 目标软件已安装（如 GIMP、Blender、LibreOffice 或你自己的应用）
-- 支持的 AI 编程工具之一：[Claude Code](#-claude-code) | [OpenCode](#-opencode) | [Qodercli](#-qodercli) | [更多平台](#-更多平台即将支持)
+- 支持的 AI 编程工具之一：[Claude Code](#-claude-code) | [OpenCode](#-opencode) | [Codex](#-codex) | [Qodercli](#-qodercli) | [更多平台](#-更多平台即将支持)
 
 ### 选择你的平台
 
@@ -135,7 +135,7 @@ cp -r CLI-Anything/cli-anything-plugin ~/.claude/plugins/cli-anything
 </details>
 
 <details>
-<summary><h4 id="-opencode">⚡ OpenCode</h4></summary>
+<summary><h4 id="-opencode">⚡ OpenCode （实验性支持）</h4></summary>
 
 **第一步：安装命令**
 
@@ -183,6 +183,7 @@ cp CLI-Anything/cli-anything-plugin/HARNESS.md .opencode/commands/
 </details>
 
 <details>
+
 <summary><h4 id="-qodercli">⚡ Qodercli</h4></summary>
 
 **第一步：注册插件**
@@ -201,6 +202,38 @@ bash CLI-Anything/qoder-plugin/setup-qodercli.sh
 /cli-anything:refine ./gimp "批处理和滤镜"
 /cli-anything:validate ./gimp
 ```
+</details>
+
+<summary><h4 id="-codex">⚡ Codex <sup><code>实验性</code></sup> <sup><code>社区贡献</code></sup></h4></summary>
+
+**第一步：安装 Skill**
+
+运行仓库内置的安装脚本：
+
+```bash
+# 克隆仓库
+git clone https://github.com/HKUDS/CLI-Anything.git
+
+# 安装 skill
+bash CLI-Anything/codex-skill/scripts/install.sh
+```
+
+脚本会把 skill 安装到 `$CODEX_HOME/skills/cli-anything`；如果没有设置 `CODEX_HOME`，则默认安装到 `~/.codex/skills/cli-anything`。
+
+安装后重启 Codex，让它重新发现这个 skill。
+
+**第二步：在 Codex 里使用 CLI-Anything**
+
+直接用自然语言描述任务，例如：
+
+```text
+Use CLI-Anything to build a harness for ./gimp
+Use CLI-Anything to refine ./shotcut for picture-in-picture workflows
+Use CLI-Anything to validate ./libreoffice
+```
+
+这个 Codex skill 复用了 Claude Code 插件和 OpenCode 命令所使用的同一套方法论，
+不会改变生成出来的 Python harness 结构。
 
 </details>
 
@@ -209,6 +242,7 @@ bash CLI-Anything/qoder-plugin/setup-qodercli.sh
 
 CLI-Anything 的设计是平台无关的，计划支持更多 AI 编程工具：
 
+- **Codex** — 已通过 `codex-skill/` 提供接入
 - **Cursor** — 即将支持
 - **Windsurf** — 即将支持
 - **你喜欢的工具** — 欢迎贡献！参考 `opencode-commands/` 目录的实现。
@@ -554,6 +588,7 @@ cli-anything/
 │   ├── cli-anything-validate.md         # 标准验证
 │   └── cli-anything-list.md             # 列出所有 CLI 工具
 │
+├── 🤖 codex-skill/                      # Codex skill 接入层
 ├── 🎨 gimp/agent-harness/               # GIMP CLI（107 项测试）
 ├── 🧊 blender/agent-harness/            # Blender CLI（208 项测试）
 ├── ✏️ inkscape/agent-harness/            # Inkscape CLI（202 项测试）
@@ -747,6 +782,12 @@ CLI_ANYTHING_FORCE_INSTALLED=1 python3 -m pytest cli_anything/<软件名>/tests/
 - **插件增强** — 新命令、阶段优化、更好的验证逻辑
 - **测试覆盖** — 更多端到端场景、边界情况、工作流测试
 
+### 已知局限
+
+- **依赖强大的基础模型** — CLI-Anything 依赖前沿级别的模型（如 Claude Opus 4.6、Claude Sonnet 4.6、GPT-5.4）才能可靠地生成 harness。较弱或较小的模型可能产出不完整或有误的 CLI，需要大量人工修正。
+- **依赖可用的源代码** — `/cli-anything` 基于源码进行分析和生成。如果目标软件只提供编译后的二进制文件，需要反编译才能获取代码，harness 的质量和覆盖率会显著下降。
+- **可能需要迭代优化** — 单次 `/cli-anything` 运行不一定能完整覆盖所有功能。通常需要执行一次或多次 `/refine` 命令，才能将 CLI 的性能和覆盖率推到生产级水平。
+
 ---
 
 ## 📖 文档
@@ -805,4 +846,3 @@ MIT License — 可自由使用、修改和分发。
   <em>感谢访问 ✨ CLI-Anything！</em><br><br>
   <img src="https://visitor-badge.laobi.icu/badge?page_id=HKUDS.CLI-Anything&style=for-the-badge&color=00d4ff" alt="Views">
 </p>
-
