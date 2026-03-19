@@ -2,7 +2,7 @@
   "meta": {
     "repo": "https://github.com/HKUDS/CLI-Anything",
     "description": "CLI-Hub — Agent-native stateful CLI interfaces for softwares, codebases, and Web Services",
-    "updated": "2026-03-18"
+    "updated": "2026-03-19"
   },
   "clis": [
     {
@@ -32,6 +32,20 @@
       "category": "network",
       "contributor": "pyxl-dev",
       "contributor_url": "https://github.com/pyxl-dev"
+    },
+    {
+      "name": "agent-avatar",
+      "display_name": "Agent-Avatar",
+      "version": "1.0.0",
+      "description": "Voice-interactive AI companion with Live2D avatar support via WebSocket API",
+      "requires": "Docker running with Agent-Avatar container",
+      "homepage": "https://github.com/netixc/Agent-Avatar",
+      "install_cmd": "pip install git+https://github.com/HKUDS/CLI-Anything.git#subdirectory=agent-avatar/agent-harness",
+      "entry_point": "cli-anything-agent-avatar",
+      "skill_md": null,
+      "category": "ai",
+      "contributor": "netixc",
+      "contributor_url": "https://github.com/netixc"
     },
     {
       "name": "audacity",
